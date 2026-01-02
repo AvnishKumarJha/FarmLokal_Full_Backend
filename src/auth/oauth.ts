@@ -9,7 +9,7 @@ export async function getAccessToken(): Promise<string> {
   const cached = await redis.get(TOKEN_KEY);
   if (cached) return cached;
 
-  const lock = await redis.set(LOCK_KEY, "1", "NX", "EX", 5);
+  const lock = await redis.set(LOCK_KEY, "1", "EX", 5);
   if (!lock) {
     await new Promise(r => setTimeout(r, 200));
     return (await redis.get(TOKEN_KEY)) as string;
